@@ -3,9 +3,9 @@ import numpy as np
 class Variable:
     def __init__(self, val, name=None, der=None):
             self.val = val
-            self.name = name
-            if name != None:
-                self.der = {name: 1.0} 
+            if name == None and der == None:
+                self.name = 'x'
+                self.der = {'x': 1.0}
             else:
                 self.der = der
     
@@ -27,14 +27,20 @@ class Variable:
             return Variable(self.val - other, der=self.der)
 
     def __rsub__(self, other):
-        return self.__sub__(other)
+        try:
+            der = {var: other.der[var] - self.der[var] for var in self.der.keys()}
+            return Variable(other.val - self.val, der=der)
+        except AttributeError:
+            der = {var: 0 - self.der[var] for var in self.der.keys()}
+            return Variable(other - self.val, der= der)
 
     def __mul__(self, other):
         try:
             der = {var: self.der[var] * other.val + other.der[var] * self.val for var in self.der.keys()}
             return Variable(self.val * other.val, der=der)
         except AttributeError:
-            return Variable(self.val * other, der=self.der*other)
+            der = {var: self.der[var] * other for var in self.der.keys()}
+            return Variable(self.val * other, der=der)
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -44,10 +50,16 @@ class Variable:
             der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
             return Variable(self.val/other.val, der=der)
         except AttributeError:
-            return Variable(self.val/other, der=self.der/other)
+            der = {var: self.der[var] / other for var in self.der.keys()}
+            return Variable(self.val/other, der=der)
 
     def __rtruediv__(self, other):
-        return self.__truediv__(other)
+        try:
+            der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
+            return Variable(self.val/other.val, der=der)
+        except AttributeError:
+            der = {var: -other/self.der[var] for var in self.der.keys()}
+            return Variable(other/self.val, der= der)
     
     def __pow__(self, other):
         #other is a scalar
@@ -61,18 +73,6 @@ class Variable:
         der = {var: -self.der[var] for var in self.der.keys()}
         return Variable(-self.val, der=der)
  
-
-
-# x1 = Variable(1, 'x1')
-# x2 = x1+1
-# x3 = x1+x2
-# print(x1.val)
-# print(x1.der)
-# print(x2.val)
-# print(x2.der)
-# print(x3.val)
-# print(x3.der)
-
 
 
 
