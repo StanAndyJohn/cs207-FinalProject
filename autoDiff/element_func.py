@@ -1,3 +1,7 @@
+import numpy as np
+import sys
+sys.path.append('..')
+from autoDiff.autoDiff import Variable
 # ELEMENTARY FUNCTIONS
 
 # Exponential
@@ -244,8 +248,8 @@ def sqrt(obj):
 	try:
 		pre_der = obj.der
 		pre_val = obj.val
-		der = {x:(0.5*pre_val**(-0.5))pre_der.get(x,0) for x in set(pre_der)}
-		val = np.tan(pre_val)
+		der = {x:(0.5*pre_val**(-0.5))*pre_der.get(x,0) for x in set(pre_der)}
+		val = np.sqrt(pre_val)
 		return Variable(val,der= der)
 	except:
 		return np.sqrt(obj)
