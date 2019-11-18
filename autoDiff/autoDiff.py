@@ -1,15 +1,37 @@
 import numpy as np
 
 class Variable:
-    def __init__(self, val, name=None, der=None):
+    def __init__(self, val, der=None):
             self.val = val
-            if name == None and der == None:
-                self.name = 'x'
+            self.name = 'x'
+            if der == None:
                 self.der = {'x': 1.0}
             else:
                 self.der = der
     
     def __add__(self, other):
+        """ 
+        Returns addition of Variable object.
+        
+        Parameters
+        =======
+        Variable object (self)
+        Variable object (other) OR float/int (other)
+        
+        Returns
+        =======
+        Variable object: self + other
+    
+        Examples
+        =======
+        >>> import numpy as np
+        >>> import autoDiff as ad
+        >>> x1 = ad.Variable(2)
+        >>> x2 = x1+2
+        >>> x3 = x1+x2
+        >>> print(x3.der)
+        {'x': 2.0}
+        """
         try:
             der = {var: self.der[var] + other.der[var] for var in self.der.keys()}
             return Variable(self.val + other.val, der=der)
