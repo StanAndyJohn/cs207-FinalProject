@@ -51,24 +51,23 @@ def test_div():
     assert x4.val == 3
     assert x4.der == {'x': -3}
 
-    # def test_pow(self):
-    #     x1 = Variable(3)
-    #     x2 = x1**2
-    #     x3 = x1**x2
-    #     x4 = 3**x1
-    #     assert x2.val == 9
-    #     assert x2.der == {'x': 6}
-    #     print(x3)
-    #     assert x3.val == 3**9
-    #     assert x3.der == {'x': (6*np.log(3)+3)*3**9}
-    #     assert x4.val == 27
-    #     assert x4.der == {'x': np.log(3)*3**3}
+def test_pow():
+    x1 = ad.Variable(3)
+    x2 = x1**2
+    # x3 = x1**x2
+    # x4 = 3**x1
+    assert x2.val == 9
+    assert x2.der == {'x': 6}
+    # assert x3.val == 3**9
+    # assert x3.der == {'x': (6*np.log(3)+3)*3**9}
+    # assert x4.val == 27
+    # assert x4.der == {'x': np.log(3)*3**3}
 
 
-# a = Test_Operators()
-# a.test_add()
-# a.test_sub()
-# a.test_mul()
-# a.test_div()
-# a.test_pow()
-
+def test_neg():
+    x1 = ad.Variable(2)
+    x2 = -x1
+    # x3 = x1**x2
+    # x4 = 3**x1
+    assert x2.val == -2
+    assert x2.der == {'x': -1}
