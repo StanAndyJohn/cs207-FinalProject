@@ -4,7 +4,7 @@ import sys
 sys.path.append('..')
 import autoDiff.autoDiff as ad
 
-def test_add(self):
+def test_add():
     x1 = ad.Variable(1)
     x2 = x1 + 2
     x3 = x1 + x2
@@ -15,7 +15,7 @@ def test_add(self):
     assert x3.val == 4
     assert x3.der == {'x': 2.0}
 
-def test_sub(self):
+def test_sub():
     x1 = ad.Variable(4)
     x2 = x1 - 4
     x3 = x2 - x1
@@ -30,7 +30,7 @@ def test_sub(self):
     assert x5.val == 0
     assert x5.der == {'x': 1}
 
-def test_mul(self):
+def test_mul():
     x1 = ad.Variable(4)
     x2 = 3*x1
     x3 = x1*x2
@@ -39,7 +39,7 @@ def test_mul(self):
     assert x3.val == 48
     assert x3.der == {'x': 24}
 
-def test_div(self):
+def test_div():
     x1 = ad.Variable(1)
     x2 = x1/5
     x3 = x1/x2
