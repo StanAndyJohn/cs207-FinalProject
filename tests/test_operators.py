@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
-# import sys
-# sys.path.append('..')
+import sys
+sys.path.append('..')
 import autoDiff.autoDiff as ad
 
 def test_add(self):
