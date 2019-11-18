@@ -1,10 +1,10 @@
 import numpy as np
 
 class Variable:
-    def __init__(self, val, name=None, der=None):
+    def __init__(self, val, der=None):
             self.val = val
-            if name == None and der == None:
-                self.name = 'x'
+            self.name = 'x'
+            if der == None:
                 self.der = {'x': 1.0}
             else:
                 self.der = der
