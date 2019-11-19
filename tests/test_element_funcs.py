@@ -23,11 +23,21 @@ def test_log():
     # x2 = Variable(1, name='x2')
     # x3 = AutoDiff.log(x1 + x2)
     x4 = fun.log(1)
+    x5 = fun.log2(Variable(1))
+    x6 = fun.log2(1)
+    x7 = fun.log10(Variable(1))
+    x8 = fun.log10(1)
     assert x1.val == np.log(1)
     assert x1.der == {'x':1}
+    assert x5.val == np.log2(1)
+    assert x5.der == {'x':1}
+    assert x7.val == np.log10(1)
+    assert x7.der == {'x':1}
     # assert x3.val == np.log(1+1)
     # assert x3.der == {'x1': 1/2, 'x2': 1/2}
     assert x4 == np.log(1)
+    assert x6 == np.log2(1)
+    assert x8 == np.log10(1)
 
 def test_trigonometric():
     x1 = fun.sin(Variable(np.pi/4))
@@ -100,6 +110,48 @@ def test_sqrt():
     assert x2.der == {'x': 0.5}
     assert x3 == 1
 
+def test_error():
+    try:
+        fun.arcsin(Variable(2))
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arcsin(Variable(-2))
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arccos(Variable(2))
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arccos(Variable(-2))
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arcsin(2)
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arcsin(-2)
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arccos(2)
+        assert False
+    except ValueError:
+        assert True
+    try:
+        fun.arccos(-2)
+        assert False
+    except ValueError:
+        assert True
+
 
 test_exp()
 test_log()
@@ -107,4 +159,5 @@ test_trigonometric()
 test_hyberbolic()
 test_inverse_trigonometric()
 test_sqrt()
+test_error()
 
