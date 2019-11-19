@@ -13,11 +13,14 @@ class Variable:
             Variable class
 
         """
-        self.val = val
-        self.name = 'x'
+        
         if der == None:
+            self.val = val
+            self.name = 'x'
             self.der = {'x': 1.0}
         else:
+            self.val = val
+            self.name = 'x'
             self.der = der
     
     def __add__(self, other):
