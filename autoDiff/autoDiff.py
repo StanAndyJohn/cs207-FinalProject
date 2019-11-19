@@ -134,11 +134,11 @@ class Variable:
             Variable object: self / other
     
         """
-        if isinstance(other, int) or isinstance(other, float):
-            if int(other) == 0:
-                raise ZeroDivisionError('Can not divide by 0')
-        elif int(other.val) == 0:
-            raise ZeroDivisionError('Can not divide by 0')
+        # if isinstance(other, int) or isinstance(other, float):
+        #     if int(other) == 0:
+        #         raise ZeroDivisionError('Can not divide by 0')
+        # elif int(other.val) == 0:
+        #     raise ZeroDivisionError('Can not divide by 0')
         try:
             der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
             return Variable(self.val/other.val, der=der)
@@ -162,8 +162,8 @@ class Variable:
             der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
             return Variable(self.val/other.val, der=der)
         except AttributeError:
-            if int(self.val) == 0:
-                raise ZeroDivisionError('Can not divide by 0')
+            # if int(self.val) == 0:
+            #     raise ZeroDivisionError('Can not divide by 0')
             der = {var: (-1)*other*self.val**(-2)*self.der[var] for var in self.der.keys()}
             return Variable(other/self.val, der= der)
     
