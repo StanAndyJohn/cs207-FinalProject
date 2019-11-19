@@ -186,7 +186,7 @@ def arcsin(obj):
 		pre_der = obj.der
 		pre_val = obj.val
 		if pre_val >= 1 or pre_val <= -1:
-      		raise ValueError("arcsin does not exist beyond (-1,1)")
+			raise ValueError("arcsin does not exist beyond (-1,1)")
 		der = {x:((1-(pre_val)**2)**(-0.5))*pre_der.get(x,0) for x in set(pre_der)}
 		val = np.arcsin(pre_val)
 		return Variable(val,der= der)
@@ -211,7 +211,7 @@ def arccos(obj):
 		pre_der = obj.der
 		pre_val = obj.val
 		if pre_val >= 1 or pre_val <= -1:
-      		raise ValueError("arccos does not exist beyond (-1,1)")
+      			raise ValueError("arccos does not exist beyond (-1,1)")
 		der = {x:(-(1-(pre_val)**2)**(-0.5))*pre_der.get(x,0) for x in set(pre_der)}
 		val = np.arccos(pre_val)
 		return Variable(val,der= der)
