@@ -3,16 +3,16 @@ import numpy as np
 class Variable:
     def __init__(self, val, der=None):
         """
-		Initialization of the Variable class, the default variable name in this milestone is x
+        Initialization of the Variable class, the default variable name in this milestone is x
 
-		Inputs:
-			val: variable value, int or float
+        Inputs:
+            val: variable value, int or float
             der: (optional) variable derivative
 
-		Output:
-			Variable class
+        Output:
+            Variable class
 
-	    """
+        """
         self.val = val
         self.name = 'x'
         if der == None:
@@ -165,16 +165,26 @@ class Variable:
         except AttributeError:
             if int(self.val) == 0:
                 raise ZeroDivisionError('Can not divide by 0')
-            der = {var: -1*other/self.der[var] for var in self.der.keys()}
+            der = {var: (-1)*other*self.val**(-2)*self.der[var] for var in self.der.keys()}
             return Variable(other/self.val, der= der)
     
     def __pow__(self, other):
-        #other is a scalar
+        """ 
+        Returns Variable object from power
+        
+        Inputs:
+            self: Variable object
+            other: Variable object or scalar
+        
+        Output:
+            Variable object: self ^ other
+    
+        """
         der = {var: other*self.val**(other-1)*self.der[var] for var in self.der.keys()}
         return Variable(self.val**other, der=der)
 
-    def __rpow__(self,other):
-        return self.__pow__(other)
+    # def __rpow__(self,other):
+    #     return self.__pow__(other)
 
     def __neg__(self):
         """ 
@@ -190,5 +200,3 @@ class Variable:
         der = {var: -self.der[var] for var in self.der.keys()}
         return Variable(-self.val, der=der)
  
-
-
