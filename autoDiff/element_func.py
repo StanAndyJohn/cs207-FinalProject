@@ -24,7 +24,7 @@ def exp(obj):
 		return Variable(val,der= der)
 	except:
 		return np.exp(obj)
-# Log
+# Log natural
 def log(obj):
 	"""
 		Returns the natrual log of the input object
@@ -44,6 +44,49 @@ def log(obj):
 		return Variable(val,der=der)
 	except:
 		return np.log(obj)
+
+# Log 2
+def log2(obj):
+	"""
+		Returns the natrual log of the input object
+		
+		Inputs:
+			obj: Autodiff.Variable object or a number
+
+		Output:
+			Autodiff.Variable object or a scalar
+
+	"""
+	try:
+		pre_der = obj.der
+		pre_val = obj.val
+		der = {x:np.divide(1,pre_val)*pre_der.get(x,0) for x in set(pre_der)}
+		val = np.log2(pre_val)
+		return Variable(val,der=der)
+	except:
+		return np.log2(obj)
+
+# Log 10
+def log10(obj):
+	"""
+		Returns the natrual log of the input object
+		
+		Inputs:
+			obj: Autodiff.Variable object or a number
+
+		Output:
+			Autodiff.Variable object or a scalar
+
+	"""
+	try:
+		pre_der = obj.der
+		pre_val = obj.val
+		der = {x:np.divide(1,pre_val)*pre_der.get(x,0) for x in set(pre_der)}
+		val = np.log10(pre_val)
+		return Variable(val,der=der)
+	except:
+		return np.log10(obj)
+
 
 # TGRIGONOMETRIC FUNCTIONS
 
@@ -186,11 +229,11 @@ def arcsin(obj):
 		pre_der = obj.der
 		pre_val = obj.val
 		if pre_val >= 1 or pre_val <= -1:
-      		raise ValueError("arcsin does not exist beyond (-1,1)")
+			raise ValueError("arcsin does not exist beyond (-1,1)")
 		der = {x:((1-(pre_val)**2)**(-0.5))*pre_der.get(x,0) for x in set(pre_der)}
 		val = np.arcsin(pre_val)
 		return Variable(val,der= der)
-	except:
+	except AttributeError:
 		if obj >= 1 or obj <= -1:
 			raise ValueError("arcsin does not exist beyond (-1,1)")
 		return np.arcsin(obj)
@@ -211,11 +254,11 @@ def arccos(obj):
 		pre_der = obj.der
 		pre_val = obj.val
 		if pre_val >= 1 or pre_val <= -1:
-      		raise ValueError("arccos does not exist beyond (-1,1)")
+			raise ValueError("arccos does not exist beyond (-1,1)")
 		der = {x:(-(1-(pre_val)**2)**(-0.5))*pre_der.get(x,0) for x in set(pre_der)}
 		val = np.arccos(pre_val)
 		return Variable(val,der= der)
-	except:
+	except AttributeError:
 		if obj >= 1 or obj <= -1:
 			raise ValueError("arccos does not exist beyond (-1,1)")
 		return np.arccos(obj)
