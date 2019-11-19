@@ -48,6 +48,7 @@ def test_mul():
 def test_div():
     x1 = ad.Variable(1)
     x2 = x1/5
+    x3 = 3/x1
     assert x2.val == 1/5
     assert x2.der == {'x': 1/5}
     assert x3.val == 3
@@ -82,4 +83,4 @@ def test_neg():
 # test_div()
 # test_pow()
 # test_neg()
-test_div_zero_division()
+# test_div_zero_division()
