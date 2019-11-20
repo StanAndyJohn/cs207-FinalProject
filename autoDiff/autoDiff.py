@@ -83,8 +83,9 @@ class Variable:
     
         """
         try:
-            der = {var: other.der[var] - self.der[var] for var in self.der.keys()}
-            return Variable(other.val - self.val, der=der)
+            raise AttributeError()
+            # der = {var: other.der[var] - self.der[var] for var in self.der.keys()}
+            # return Variable(other.val - self.val, der=der)
         except AttributeError:
             der = {var: 0 - self.der[var] for var in self.der.keys()}
             return Variable(other - self.val, der= der)
@@ -135,8 +136,9 @@ class Variable:
     
         """
         try:
-            der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
-            return Variable(self.val/other.val, der=der)
+            raise AttributeError()
+            # der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
+            # return Variable(self.val/other.val, der=der)
         except AttributeError:
             der = {var: self.der[var] / other for var in self.der.keys()}
             return Variable(self.val/other, der=der)
@@ -154,8 +156,9 @@ class Variable:
     
         """
         try:
-            der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
-            return Variable(self.val/other.val, der=der)
+            raise AttributeError()
+            # der = {var: (self.der[var]*other.val-other.der[var]*self.val)/(other.val**2) for var in self.der.keys()}
+            # return Variable(self.val/other.val, der=der)
         except AttributeError:
             der = {var: (-1)*other*self.val**(-2)*self.der[var] for var in self.der.keys()}
             return Variable(other/self.val, der= der)
@@ -166,17 +169,31 @@ class Variable:
         
         Inputs:
             self: Variable object
-            other: Variable object or scalar
+            other: scalar (Variable to the power of a variable is not supported in this milestone)
         
         Output:
             Variable object: self ^ other
     
         """
+        if isinstance(other, Variable):
+            raise ValueError("Variable to the power of a variable is not supported in this milestone")
         der = {var: other*self.val**(other-1)*self.der[var] for var in self.der.keys()}
         return Variable(self.val**other, der=der)
 
-    # def __rpow__(self,other):
-    #     return self.__pow__(other)
+    def __rpow__(self,other):
+        """ 
+        Returns Variable object from power
+        
+        Inputs:
+            self: scalar
+            other: Variable object
+        
+        Output:
+            Variable object: self ^ other
+    
+        """
+        der = {var: other**self.val*np.log(other)*self.der[var] for var in self.der.keys()}
+        return Variable(other**self.val, der=der)
 
     def __neg__(self):
         """ 

@@ -54,21 +54,21 @@ def test_div():
     assert x3.val == 3
     assert x3.der == {'x': -3}
 
-# def test_div_zero_division():
-#     with pytest.raises(Exception):
-#         x3 = 3/x1
+def test_pow_of_variable():
+    with pytest.raises(Exception):
+        x1 = ad.Variable(1)
+        x3 = x1**x1
 
 def test_pow():
     x1 = ad.Variable(3)
     x2 = x1**2
-    # x3 = x1**x2
-    # x4 = 3**x1
+    x3 = 3**x1
+    print(x3.der)
+    print(x3.val)
     assert x2.val == 9
     assert x2.der == {'x': 6}
-    # assert x3.val == 3**9
-    # assert x3.der == {'x': (6*np.log(3)+3)*3**9}
-    # assert x4.val == 27
-    # assert x4.der == {'x': np.log(3)*3**3}
+    assert x3.val == 27
+    assert x3.der == {'x': np.log(3)*3**3}
 
 
 def test_neg():
