@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 sys.path.append('..')
-from autoDiff.autoDiff import Variable
+from autoDiff.operator import Variable
 # ELEMENTARY FUNCTIONS
 
 # Exponential

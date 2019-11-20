@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import sys
 sys.path.append('..')
-import autoDiff.autoDiff as ad
+import autoDiff.operator as ad
 
 def test_add():
     x1 = ad.Variable(1)
