@@ -1,4 +1,6 @@
-import element_func as func
+import sys
+sys.path.append('..')
+import autoDiff.element_func as func
 from autoDiff.operator import Variable
 
 
