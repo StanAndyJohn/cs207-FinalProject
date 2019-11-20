@@ -2,7 +2,7 @@ import pytest
 import sys
 sys.path.append('..')
 import numpy as np
-from autoDiff.autoDiff import Variable
+from autoDiff.operator import Variable
 from autoDiff import element_func as fun
 
 
