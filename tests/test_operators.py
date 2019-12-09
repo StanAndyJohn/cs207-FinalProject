@@ -4,83 +4,142 @@ import sys
 sys.path.append('..')
 import autoDiff.operator as ad
 
-def test_add():
-    x1 = ad.Variable(1)
-    x2 = x1 + 2
-    x3 = x1 + x2
-    x4 = 3 + x1
-    assert x1.val == 1
-    assert x1.der == {'x': 1.0}
-    assert x2.val == 3
-    assert x2.der == {'x': 1.0}
-    assert x3.val == 4
-    assert x3.der == {'x': 2.0}
-    assert x4.val == 4
-    assert x4.der == {'x': 1.0}
 
-def test_sub():
-    x1 = ad.Variable(4)
+def test_dup_vars():
+    with np.testing.assert_raises(Exception):
+        a = ad.StartUp(2)
+        x1 = a.create_variable(1, 'x1')
+        x2 = a.create_variable(2, 'x1')
+    
+def test_over_vars():
+    with np.testing.assert_raises(Exception):
+        a = ad.StartUp(1)
+        x1 = a.create_variable(1, 'x1')
+        x2 = a.create_variable(2, 'x2')
+
+def test_add_1():
+    a = ad.StartUp(1)
+    x1 = a.create_variable(1, 'x1')
+    x2 = x1 + 2
+    x3 = 3 + x1
+    assert x1.val == [1]
+    assert x1.der == [1]
+    assert x2.val == [3]
+    assert x2.der == [1]
+    assert x3.val == [4]
+    assert x3.der == [1]
+    
+def test_sub_1():
+    a = ad.StartUp(1)
+    x1 = a.create_variable(2, 'x1')
     x2 = x1 - 4
+    assert x2.val == [-2]
+    assert x2.der == [1]
+
+def test_sub_2():
+    a = ad.StartUp(1)
+    x1 = a.create_variable(2, 'x1')
+    x2 = 4 - x1
+    assert x2.val == [2]
+    assert x2.der == [-1]
+
+def test_sub_3():
+    a = ad.StartUp(2)
+    x1 = a.create_variable(2, 'x1')
+    x2 = a.create_variable(5, 'x2')
     x3 = x2 - x1
-    x4 = 4 - x1
-    x5 = x1 - 4
-    assert x2.val == 0
-    assert x2.der == {'x': 1}
-    assert x3.val == -4
-    assert x3.der == {'x': 0}
-    assert x4.val == 0
-    assert x4.der == {'x': -1}
-    assert x5.val == 0
-    assert x5.der == {'x': 1}
+    assert x3.val == [3]
+    assert x3.der[0] == -1
+    assert x3.der[1] == 1
 
 def test_mul():
-    x1 = ad.Variable(4)
-    x2 = 3*x1
-    x3 = x1*x2
-    x4 = x1*4
-    assert x2.val == 12
-    assert x2.der == {'x': 3}
-    assert x3.val == 48
-    assert x3.der == {'x': 24}
-    assert x4.val == 16
-    assert x4.der == {'x': 4}
+    a = ad.StartUp(2)
+    x1 = a.create_variable(3, 'x1')
+    x2 = a.create_variable(4, 'x2')
+    x3 = x1 * x2 * x1
+    assert x3.val == [36]
+    assert x3.der[0] == 24
+    assert x3.der[1] == 9
 
-def test_div():
-    x1 = ad.Variable(1)
+def test_div_1():
+    a = ad.StartUp(1)
+    x1 = a.create_variable(1, 'x1')
     x2 = x1/5
-    x3 = 3/x1
-    assert x2.val == 1/5
-    assert x2.der == {'x': 1/5}
-    assert x3.val == 3
-    assert x3.der == {'x': -3}
+    assert x2.val == [0.2]
+    assert x2.der[0] == 0.2
 
-def test_pow_of_variable():
-    with pytest.raises(Exception):
-        x1 = ad.Variable(1)
-        x3 = x1**x1
+def test_div_2():
+    a = ad.StartUp(1)
+    x1 = a.create_variable(1, 'x1')
+    x2 = 5/x1
+    assert x2.val == [5]
+    assert x2.der[0] == -5
 
-def test_pow():
-    x1 = ad.Variable(3)
-    x2 = x1**2
-    x3 = 3**x1
-    print(x3.der)
-    print(x3.val)
-    assert x2.val == 9
-    assert x2.der == {'x': 6}
-    assert x3.val == 27
-    assert x3.der == {'x': np.log(3)*3**3}
+def test_div_3():
+    a = ad.StartUp(3)
+    x1 = a.create_variable(10, 'x1')
+    x2 = a.create_variable(2, 'x2')
+    x3 = a.create_variable(1, 'x3')
+    x4 = x1/x2/x3
+    assert x4.val == [5]
+    assert x4.der[0] == 0.5
+    assert x4.der[1] == -2.5
+    assert x4.der[2] == -5
 
+def test_pow_1():
+    a = ad.StartUp(1)
+    x1 = a.create_variable(2, 'x1')
+    x2 = 5**x1
+    assert x2.val == [25]
+    assert np.round(x2.der, 2) == 40.24
+
+def test_pow_2():
+    a = ad.StartUp(2)
+    x1 = a.create_variable(2, 'x1')
+    x2 = a.create_variable(3, 'x2')
+    x3 = x1**x2
+    assert x3.val == [8]
+    assert x3.der[0] == 12
+    assert np.round(x3.der[1], 2) == 5.55
 
 def test_neg():
-    x1 = ad.Variable(2)
+    a = ad.StartUp(1)
+    x1 = a.create_variable(1, 'x1')
     x2 = -x1
-    assert x2.val == -2
-    assert x2.der == {'x': -1}
+    assert x2.val == [-1]
+    assert x2.der == [-1]
 
-# test_add()
-# test_sub()
-# test_mul()
-# test_div()
-# test_pow()
-# test_neg()
-# test_div_zero_division()
+def test_equal():
+    a = ad.StartUp(2)
+    x1 = a.create_variable(4, 'x1')
+    x2 = a.create_variable(4, 'x2')
+    x3 = (x1 == x2)
+    assert x3 == False
+
+def test_equal_2():
+    a = ad.StartUp(2)
+    x1 = a.create_variable(4, 'x1')
+    x3 = (x1 == 5)
+    assert x3 == False
+
+def test_not_equal():
+    a = ad.StartUp(2)
+    x1 = a.create_variable(4, 'x1')
+    x2 = a.create_variable(4, 'x2')
+    x3 = (x1 != x2)
+    assert x3 == True
+
+test_add_1()
+test_sub_1()
+test_sub_2()
+test_sub_3()
+test_mul()
+test_div_1()
+test_div_2()
+test_div_3()
+test_pow_1()
+test_pow_2()
+test_neg()
+test_equal()
+test_equal_2()
+test_not_equal()
