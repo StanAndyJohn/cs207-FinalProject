@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
     
 setuptools.setup(
-    name="adgroup33", # Replace with your own username
+    name="AutoDiff-StanAndyJohn", # Replace with your own username
     version="0.1.1",
     author="Harvard CS207 Group 33",
     author_email="johnathan_jiang@harvard.edu",
